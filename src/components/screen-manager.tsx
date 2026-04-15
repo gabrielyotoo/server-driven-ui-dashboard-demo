@@ -10,7 +10,7 @@ export const ScreenManager = (props: ScreenManagerProps) => {
   const [screens, setScreens] = useState<Screen[]>([]);
 
   const handleCreateScreen = () => {
-    const baseName = 'New screen';
+    const baseName = 'Nova tela';
     const existingNames = new Set(screens.map((screen) => screen.name));
     let newName = baseName;
     let counter = 1;
@@ -23,6 +23,15 @@ export const ScreenManager = (props: ScreenManagerProps) => {
     props.onChangeScreen(newScreen);
   };
 
+  const handleDeleteScreen = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    { name }: Screen,
+  ) => {
+    e.stopPropagation();
+    setScreens((prev) => prev.filter((s) => s.name !== name));
+    props.onChangeScreen(null);
+  };
+
   return (
     <div>
       <button onClick={handleCreateScreen}>CRIAR NOVA TELA</button>
@@ -32,7 +41,15 @@ export const ScreenManager = (props: ScreenManagerProps) => {
             className="whitespace-nowrap cursor-pointer"
             onClick={() => props.onChangeScreen(screen)}
           >
-            <p>{screen.name}</p>
+            <div className="flex flex-row gap-x-2">
+              <p>{screen.name}</p>
+              <button
+                className="cursor-pointer"
+                onClick={(e) => handleDeleteScreen(e, screen)}
+              >
+                <p>x</p>
+              </button>
+            </div>
             {screen.name === props.screen?.name ? (
               <div className="h-1 bg-cyan-700" />
             ) : null}
