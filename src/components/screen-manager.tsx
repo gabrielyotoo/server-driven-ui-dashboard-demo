@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { Screen } from '../types';
+import { useScreen } from '../hooks/use-screen';
 
 interface ScreenManagerProps {
   onChangeScreen: (newScreen: Screen | null) => void;
-  screen: Screen | null;
 }
 
-export const ScreenManager = (props: ScreenManagerProps) => {
+export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
+  const currentScreen = useScreen();
   const [screens, setScreens] = useState<Screen[]>([]);
 
   const handleCreateScreen = () => {
@@ -20,7 +21,7 @@ export const ScreenManager = (props: ScreenManagerProps) => {
     }
     const newScreen = { name: newName };
     setScreens((prev) => [...prev, newScreen]);
-    props.onChangeScreen(newScreen);
+    onChangeScreen(newScreen);
   };
 
   const handleDeleteScreen = (
@@ -29,7 +30,7 @@ export const ScreenManager = (props: ScreenManagerProps) => {
   ) => {
     e.stopPropagation();
     setScreens((prev) => prev.filter((s) => s.name !== name));
-    props.onChangeScreen(null);
+    onChangeScreen(null);
   };
 
   return (
@@ -39,7 +40,8 @@ export const ScreenManager = (props: ScreenManagerProps) => {
         {screens.map((screen) => (
           <div
             className="whitespace-nowrap cursor-pointer"
-            onClick={() => props.onChangeScreen(screen)}
+            onClick={() => onChangeScreen(screen)}
+            key={screen.name}
           >
             <div className="flex flex-row gap-x-2">
               <p>{screen.name}</p>
@@ -50,7 +52,7 @@ export const ScreenManager = (props: ScreenManagerProps) => {
                 <p>x</p>
               </button>
             </div>
-            {screen.name === props.screen?.name ? (
+            {screen.name === currentScreen?.name ? (
               <div className="h-1 bg-cyan-700" />
             ) : null}
           </div>

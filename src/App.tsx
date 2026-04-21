@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import './App.css';
 import { ScreenManager } from './components/screen-manager';
 import { ScreenContext } from './context/screen';
 import type { Screen } from './types';
+import { ScreenEditor } from './components/screen-editor';
 
 function App() {
   const [screen, setScreen] = useState<Screen | null>(null);
@@ -10,8 +10,8 @@ function App() {
   return (
     <ScreenContext.Provider value={screen}>
       <div>
-        <ScreenManager onChangeScreen={setScreen} screen={screen} />
-        {/* <ScreenEditor screen={screen} /> */}
+        <ScreenManager onChangeScreen={setScreen} />
+        <ScreenEditor />
       </div>
     </ScreenContext.Provider>
   );

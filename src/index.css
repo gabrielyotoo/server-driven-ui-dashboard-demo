@@ -1,4 +1,8 @@
 @import 'tailwindcss';
+@theme {
+  --spacing-compact-w: 300px;
+  --spacing-compact-h: 600px;
+}
 
 :root {
   --text: #6b6375;
