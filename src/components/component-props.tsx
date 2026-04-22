@@ -21,7 +21,6 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
         <TextPropsForm
           key={component.id}
           onChange={(values) => {
-            console.log(values);
             onChange({
               numberOfLines: values.numberOfLines,
               children: values.textValue,

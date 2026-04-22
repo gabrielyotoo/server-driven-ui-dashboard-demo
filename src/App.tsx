@@ -28,7 +28,7 @@ function App() {
             }
           />
           <ScreenEditor />
-          <span className="flex flex-col gap-y-6 w-[80%] items-center my-10 self-center items-stretch">
+          <span className="flex flex-col gap-y-6 w-[80%] my-10 self-center items-stretch">
             {screen ? (
               <button
                 className="bg-orange-600 text-white py-8 text-center rounded-lg cursor-pointer"
@@ -37,7 +37,7 @@ function App() {
                 Publicar alterações
               </button>
             ) : null}
-            {code ? <code className="px-4 text-start">{code}</code> : null}
+            {code ? <pre className="px-4 text-start">{code}</pre> : null}
           </span>
         </div>
       </ScreenDispatchContext.Provider>
