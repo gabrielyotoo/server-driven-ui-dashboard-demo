@@ -1,12 +1,12 @@
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 export const TextPropsForm = () => {
-  const { register } = useFormContext();
+  const { register } = useForm();
 
   return (
-    <span>
+    <form>
       <label>Texto</label>
       <input type="text" {...register} />
-    </span>
+    </form>
   );
 };

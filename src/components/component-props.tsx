@@ -1,15 +1,14 @@
+import { useComponent } from '../hooks/use-component';
 import { TextPropsForm } from './forms/text-props-form';
 
-export interface Component {
-  type: 'View' | 'Text' | 'Pressable' | 'Image' | 'Gradient';
-}
+export const ComponentProps = () => {
+  const component = useComponent();
 
-interface ComponentPropsProps {
-  type: Component['type'];
-}
+  if (!component) {
+    return null;
+  }
 
-export const ComponentProps = ({ type }: ComponentPropsProps) => {
-  if (type === 'Text') {
+  if (component.type === 'Text') {
     return <TextPropsForm />;
   }
 };

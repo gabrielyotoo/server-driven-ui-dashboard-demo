@@ -19,7 +19,7 @@ export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
       newName = `${baseName} (${counter})`;
       counter++;
     }
-    const newScreen = { name: newName };
+    const newScreen: Screen = { name: newName, components: [] };
     setScreens((prev) => [...prev, newScreen]);
     onChangeScreen(newScreen);
   };
