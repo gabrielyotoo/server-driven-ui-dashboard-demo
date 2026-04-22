@@ -7,11 +7,13 @@ type UpdateComponentsAction = Action<
   'UPDATE_COMPONENTS',
   { componentId: string; component: Partial<Component> }
 >;
+type AddComponentAction = Action<'ADD_COMPONENT', Omit<Component, 'order'>>;
 
 type ScreenActions =
   | SetScreenAction
   | SetComponentsAction
-  | UpdateComponentsAction;
+  | UpdateComponentsAction
+  | AddComponentAction;
 
 export const ScreenContext = createContext<Screen | null>(null);
 export const ScreenDispatchContext = createContext<
@@ -56,6 +58,21 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
       return {
         ...state,
         components: newComponents,
+      };
+    }
+    case 'ADD_COMPONENT': {
+      if (!state) {
+        return state;
+      }
+
+      const order =
+        state.components.reduce((max, item) => {
+          return item.order > max ? item.order : max;
+        }, 0) + 1;
+
+      return {
+        ...state,
+        components: [...state.components, { ...payload, order } as Component],
       };
     }
     default:

@@ -24,6 +24,7 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
   return (
     <div className="flex flex-col gap-y-2">
       <FormField label="Id" disabled value={component?.id ?? ''} />
+      <FormField label="Order" disabled value={component?.order ?? ''} />
       {form}
     </div>
   );

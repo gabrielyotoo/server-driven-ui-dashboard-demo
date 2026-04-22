@@ -15,13 +15,15 @@ export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
 
   return (
     <div className="w-compact-w h-compact-h bg-white">
-      {screen.components.map((component) => (
-        <ComponentRenderer
-          key={component.id}
-          component={component}
-          onClick={onComponentClick}
-        />
-      ))}
+      {screen.components
+        .sort((a, b) => a.order - b.order)
+        .map((component) => (
+          <ComponentRenderer
+            key={component.id}
+            component={component}
+            onClick={onComponentClick}
+          />
+        ))}
     </div>
   );
 };

@@ -7,6 +7,7 @@ export type Reducer<S, A> = (state: S, action: A) => S;
 
 interface ComponentBase {
   id: string;
+  order: number;
 }
 
 export interface TextComponent extends ComponentBase {

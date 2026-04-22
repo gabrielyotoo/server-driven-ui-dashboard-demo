@@ -9,7 +9,9 @@ import { generateId } from '../utils/id';
 
 export const ScreenEditor = () => {
   const [screen, dispatch] = useScreen();
-  const [component, setComponent] = useState<null | Component>(null);
+  const [component, setComponent] = useState<null | Omit<Component, 'order'>>(
+    null,
+  );
 
   if (screen === null) {
     return (
@@ -20,12 +22,15 @@ export const ScreenEditor = () => {
   }
 
   const handleAddComponent = (componentType: Component['type']) => {
-    const newComponent: Component = {
+    const newComponent: Omit<Component, 'order'> = {
       type: componentType,
       id: generateId(),
     };
     setComponent(newComponent);
-    screen.components.push(newComponent);
+    dispatch({
+      type: 'ADD_COMPONENT',
+      payload: newComponent,
+    });
   };
 
   const handlePropsChange = (props: Component['props']) => {
