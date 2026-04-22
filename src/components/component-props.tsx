@@ -17,7 +17,18 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
     }
 
     if (component.type === 'Text') {
-      return <TextPropsForm key={component.id} onChange={onChange} />;
+      return (
+        <TextPropsForm
+          key={component.id}
+          onChange={(values) => {
+            console.log(values);
+            onChange({
+              numberOfLines: values.numberOfLines,
+              children: values.textValue,
+            });
+          }}
+        />
+      );
     }
   }, [component, onChange]);
 

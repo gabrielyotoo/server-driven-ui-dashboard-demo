@@ -13,8 +13,8 @@ interface ComponentBase {
 export interface TextComponent extends ComponentBase {
   type: 'Text';
   props?: {
-    textValue: string;
     numberOfLines: number;
+    children: string;
   };
 }
 
@@ -22,6 +22,7 @@ export interface ViewComponent extends ComponentBase {
   type: 'View';
   props?: {
     scrollable: boolean;
+    children: Component[];
   };
 }
 
@@ -31,6 +32,7 @@ export interface PressableComponent extends ComponentBase {
     delayLongPress: number;
     disabled: boolean;
     pressRetentionOffset: number;
+    children: Component[];
   };
 }
 
@@ -40,6 +42,7 @@ export interface ImageComponent extends ComponentBase {
     alt: string;
     resizeMode: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center';
     source: { uri: string };
+    children: never;
   };
 }
 
@@ -48,6 +51,7 @@ export interface GradientComponent extends ComponentBase {
   props?: {
     colors: string[];
     locations: number[];
+    children: never;
   };
 }
 
