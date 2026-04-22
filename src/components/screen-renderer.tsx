@@ -1,8 +1,13 @@
 import { useScreen } from '../hooks/use-screen';
+import type { Component } from '../types';
 import { ComponentRenderer } from './component-renderer';
 
-export const ScreenRenderer = () => {
-  const screen = useScreen();
+interface ScreenRendererProps {
+  onComponentClick: (component: Component) => void;
+}
+
+export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
+  const [screen] = useScreen();
 
   if (!screen) {
     return null;
@@ -11,7 +16,11 @@ export const ScreenRenderer = () => {
   return (
     <div className="w-compact-w h-compact-h bg-white">
       {screen.components.map((component) => (
-        <ComponentRenderer key={component.id} component={component} />
+        <ComponentRenderer
+          key={component.id}
+          component={component}
+          onClick={onComponentClick}
+        />
       ))}
     </div>
   );

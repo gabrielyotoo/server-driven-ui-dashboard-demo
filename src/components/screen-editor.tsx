@@ -8,7 +8,7 @@ import { ComponentProps } from './component-props';
 import { generateId } from '../utils/id';
 
 export const ScreenEditor = () => {
-  const screen = useScreen();
+  const [screen, dispatch] = useScreen();
   const [component, setComponent] = useState<null | Component>(null);
 
   if (screen === null) {
@@ -20,9 +20,30 @@ export const ScreenEditor = () => {
   }
 
   const handleAddComponent = (componentType: Component['type']) => {
-    const newComponent = { type: componentType, id: generateId() };
+    const newComponent: Component = {
+      type: componentType,
+      id: generateId(),
+    };
     setComponent(newComponent);
     screen.components.push(newComponent);
+  };
+
+  const handlePropsChange = (props: Component['props']) => {
+    setComponent((prev) => (prev ? ({ ...prev, props } as Component) : null));
+    const currentComponent = screen.components.find(
+      ({ id }) => id === component?.id,
+    );
+    if (currentComponent) {
+      dispatch({
+        type: 'UPDATE_COMPONENTS',
+        payload: {
+          componentId: currentComponent.id,
+          component: {
+            props,
+          } as Component,
+        },
+      });
+    }
   };
 
   return (
@@ -42,10 +63,10 @@ export const ScreenEditor = () => {
       </form>
       <ComponentContext.Provider value={component}>
         <span className="flex justify-center mt-5 gap-x-10">
-          <ScreenRenderer />
-          <aside className="flex flex-col items-start">
+          <ScreenRenderer onComponentClick={setComponent} />
+          <aside className="flex flex-col items-start gap-y-6">
             <ComponentSelector onAdd={handleAddComponent} />
-            <ComponentProps />
+            <ComponentProps onChange={handlePropsChange} />
           </aside>
         </span>
       </ComponentContext.Provider>

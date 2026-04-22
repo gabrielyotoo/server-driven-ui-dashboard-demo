@@ -1,18 +1,27 @@
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { ScreenManager } from './components/screen-manager';
-import { ScreenContext } from './context/screen';
-import type { Screen } from './types';
+import {
+  ScreenContext,
+  ScreenDispatchContext,
+  screenReducer,
+} from './context/screen';
 import { ScreenEditor } from './components/screen-editor';
 
 function App() {
-  const [screen, setScreen] = useState<Screen | null>(null);
+  const [screen, dispatch] = useReducer(screenReducer, null);
 
   return (
     <ScreenContext.Provider value={screen}>
-      <div>
-        <ScreenManager onChangeScreen={setScreen} />
-        <ScreenEditor />
-      </div>
+      <ScreenDispatchContext.Provider value={dispatch}>
+        <div>
+          <ScreenManager
+            onChangeScreen={(newScreen) =>
+              dispatch({ type: 'SET_SCREEN', payload: newScreen })
+            }
+          />
+          <ScreenEditor />
+        </div>
+      </ScreenDispatchContext.Provider>
     </ScreenContext.Provider>
   );
 }

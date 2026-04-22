@@ -1,4 +1,9 @@
 import { useContext } from 'react';
-import { ScreenContext } from '../context/screen';
+import { ScreenContext, ScreenDispatchContext } from '../context/screen';
 
-export const useScreen = () => useContext(ScreenContext);
+export const useScreen = () => {
+  const screenContext = useContext(ScreenContext);
+  const dispatchContext = useContext(ScreenDispatchContext);
+
+  return [screenContext, dispatchContext] as const;
+};
