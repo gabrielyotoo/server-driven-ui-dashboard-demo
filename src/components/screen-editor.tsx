@@ -20,7 +20,9 @@ export const ScreenEditor = () => {
   }
 
   const handleAddComponent = (componentType: Component['type']) => {
-    setComponent({ type: componentType, id: generateId() });
+    const newComponent = { type: componentType, id: generateId() };
+    setComponent(newComponent);
+    screen.components.push(newComponent);
   };
 
   return (
