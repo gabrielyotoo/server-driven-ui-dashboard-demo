@@ -3,6 +3,7 @@ import { useComponent } from '../hooks/use-component';
 import { TextPropsForm } from './forms/text-props-form';
 import { FormField } from './form-field';
 import type { Component } from '../types';
+import { ViewPropsForm } from './forms/view-props-form';
 
 interface ComponentPropsProps {
   onChange: (props: Component['props']) => void;
@@ -24,6 +25,20 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
             onChange({
               ...values,
               children: values.textValue,
+            });
+          }}
+        />
+      );
+    }
+
+    if (component.type === 'View') {
+      return (
+        <ViewPropsForm
+          key={component.id}
+          onChange={(values) => {
+            onChange({
+              ...values,
+              children: [],
             });
           }}
         />

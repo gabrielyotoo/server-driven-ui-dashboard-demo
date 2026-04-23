@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { cloneElement, useMemo } from 'react';
 import type { Component } from '../types';
 import { Text } from './component-renderers/text';
+import { View } from './component-renderers/view';
 
 interface ComponentRendererProps {
   component: Component;
@@ -13,15 +14,15 @@ export const ComponentRenderer = ({
 }: ComponentRendererProps) => {
   const componentRender = useMemo(() => {
     if (component.type === 'Text') {
-      return <Text props={component.props} />;
+      return <Text component={component} />;
     }
 
-    return null;
+    if (component.type === 'View') {
+      return <View component={component} />;
+    }
+
+    return <></>;
   }, [component]);
 
-  return (
-    <div className="cursor-pointer" onClick={() => onClick(component)}>
-      {componentRender}
-    </div>
-  );
+  return cloneElement(componentRender, { onClick: () => onClick(component) });
 };

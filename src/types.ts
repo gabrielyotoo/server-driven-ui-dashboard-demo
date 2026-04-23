@@ -23,6 +23,7 @@ export interface ViewComponent extends ComponentBase {
   type: 'View';
   props?: {
     scrollable: boolean;
+    horizontal: boolean;
     children: Component[];
     style: string;
   };
@@ -66,6 +67,11 @@ export type Component =
   | PressableComponent
   | ImageComponent
   | GradientComponent;
+
+export interface ComponentProps<T extends Component> {
+  component: T;
+  onClick?: (component: T) => void;
+}
 
 export interface Screen {
   name: string;

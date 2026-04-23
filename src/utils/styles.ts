@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 
 const extractDeclarations = (css: string): string => {
   const match = css.match(/{([\s\S]*)}/);
+
   return match ? match[1].trim() : '';
 };
 
@@ -10,7 +11,7 @@ export const cssBlockToStyle = (css: string): CSSProperties => {
 
   const declarations = extractDeclarations(css);
 
-  declarations.split(';').forEach((rule) => {
+  declarations.split(/;\*\/|;/).forEach((rule) => {
     const [prop, value] = rule.split(':');
     if (!prop || !value) {
       return;

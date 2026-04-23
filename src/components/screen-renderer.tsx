@@ -14,7 +14,7 @@ export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
   }
 
   return (
-    <div className="w-compact-w h-compact-h bg-white">
+    <div className="w-compact-w h-compact-h bg-white flex flex-col">
       {screen.components
         .sort((a, b) => a.order - b.order)
         .map((component) => (
