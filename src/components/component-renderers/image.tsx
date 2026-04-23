@@ -22,7 +22,7 @@ export const Image = ({
 
   return (
     <img
-      onClick={() => onClick?.(component)}
+      onClick={onClick}
       src={props?.source.uri}
       alt={props?.alt}
       className={cClasses}

@@ -23,7 +23,7 @@ export const View = ({ component, onClick }: ComponentProps<ViewComponent>) => {
       id={id}
       style={cssBlockToStyle(props?.style ?? '')}
       className={cClasses}
-      onClick={() => onClick?.(component)}
+      onClick={onClick}
     >
       {props?.children.map((child) => (
         <ComponentRenderer component={child} onClick={() => {}} />

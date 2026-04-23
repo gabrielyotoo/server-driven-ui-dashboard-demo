@@ -70,7 +70,7 @@ export type Component =
 
 export interface ComponentProps<T extends Component> {
   component: T;
-  onClick?: (component: T) => void;
+  onClick?: VoidFunction;
 }
 
 export interface Screen {

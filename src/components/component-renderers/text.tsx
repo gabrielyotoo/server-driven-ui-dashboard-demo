@@ -23,7 +23,7 @@ export const Text = ({ component, onClick }: ComponentProps<TextComponent>) => {
       id={id}
       className={cClasses}
       style={cssBlockToStyle(props?.style ?? '')}
-      onClick={() => onClick?.(component)}
+      onClick={onClick}
     >
       {!props?.children ? 'Altere o texto ao lado' : props.children}
     </p>
