@@ -15,6 +15,7 @@ export interface TextComponent extends ComponentBase {
   props?: {
     numberOfLines: number;
     children: string;
+    style: string;
   };
 }
 
@@ -23,6 +24,7 @@ export interface ViewComponent extends ComponentBase {
   props?: {
     scrollable: boolean;
     children: Component[];
+    style: string;
   };
 }
 
@@ -33,6 +35,7 @@ export interface PressableComponent extends ComponentBase {
     disabled: boolean;
     pressRetentionOffset: number;
     children: Component[];
+    style: string;
   };
 }
 
@@ -43,6 +46,7 @@ export interface ImageComponent extends ComponentBase {
     resizeMode: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center';
     source: { uri: string };
     children: never;
+    style: string;
   };
 }
 
@@ -52,6 +56,7 @@ export interface GradientComponent extends ComponentBase {
     colors: string[];
     locations: number[];
     children: never;
+    style: string;
   };
 }
 

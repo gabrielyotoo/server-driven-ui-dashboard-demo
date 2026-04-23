@@ -1,4 +1,5 @@
 import type { Screen } from '../types';
+import { cssToReactNative } from '../utils/styles';
 
 export const usePublishCode = () => (screen: Screen | null) => {
   if (!screen) {
@@ -13,13 +14,14 @@ export const usePublishCode = () => (screen: Screen | null) => {
         base: {
           sections: screen.components.map((component) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { children: _, ...props } = component.props ?? {};
+            const { children, style, ...props } = component.props ?? {};
 
             return {
               props,
               children: component.props?.children,
               sectionComponentType: component.type,
               id: component.id,
+              styles: cssToReactNative(component.props?.style),
             };
           }),
           order: 1,

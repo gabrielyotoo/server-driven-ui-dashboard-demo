@@ -22,7 +22,7 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
           key={component.id}
           onChange={(values) => {
             onChange({
-              numberOfLines: values.numberOfLines,
+              ...values,
               children: values.textValue,
             });
           }}
