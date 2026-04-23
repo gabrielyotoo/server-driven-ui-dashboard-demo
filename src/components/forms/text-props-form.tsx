@@ -23,9 +23,8 @@ export const TextPropsForm = ({ onChange }: TextPropsFormProps) => {
   const { control } = useForm<TextPropsFormValues>({
     defaultValues: component?.props
       ? {
+          ...component.props,
           textValue: component.props.children,
-          numberOfLines: component.props.numberOfLines,
-          style: component.props.style,
         }
       : {
           textValue: '',

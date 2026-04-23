@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import type { ImageComponent } from '../types';
 
 const extractDeclarations = (css: string): string => {
   const match = css.match(/{([\s\S]*)}/);
@@ -99,4 +100,19 @@ export const cssToReactNative = (css: string | undefined): RNStyle => {
   });
 
   return result;
+};
+
+export const resizeModeToObjectFit = (
+  resizeMode: NonNullable<ImageComponent['props']>['resizeMode'],
+) => {
+  return {
+    cover: { objectFit: 'cover' as CSSProperties['objectFit'] },
+    contain: { objectFit: 'contain' as CSSProperties['objectFit'] },
+    stretch: { objectFit: 'fill' as CSSProperties['objectFit'] },
+    center: {
+      objectFit: 'none' as CSSProperties['objectFit'],
+      objectPosition: 'center' as CSSProperties['objectPosition'],
+    },
+    repeat: { backgroundRepeat: 'repeat' as CSSProperties['backgroundRepeat'] },
+  }[resizeMode];
 };

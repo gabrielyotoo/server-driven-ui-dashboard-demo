@@ -4,6 +4,7 @@ import { TextPropsForm } from './forms/text-props-form';
 import { FormField } from './form-field';
 import type { Component } from '../types';
 import { ViewPropsForm } from './forms/view-props-form';
+import { ImagePropsForm } from './forms/image-props-form';
 
 interface ComponentPropsProps {
   onChange: (props: Component['props']) => void;
@@ -39,6 +40,19 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
             onChange({
               ...values,
               children: [],
+            });
+          }}
+        />
+      );
+    }
+
+    if (component.type === 'Image') {
+      return (
+        <ImagePropsForm
+          key={component.id}
+          onChange={(values) => {
+            onChange({
+              ...values,
             });
           }}
         />

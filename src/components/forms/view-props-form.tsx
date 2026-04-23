@@ -20,11 +20,7 @@ export const ViewPropsForm = ({ onChange }: ViewPropsFormProps) => {
   const component = useComponent<ViewComponent>();
   const { control } = useForm<ViewPropsFormValues>({
     defaultValues: component?.props
-      ? {
-          scrollable: component.props.scrollable,
-          style: component.props.style,
-          horizontal: component.props.horizontal,
-        }
+      ? component.props
       : {
           scrollable: true,
           style: `#${component.id} {
