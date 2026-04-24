@@ -7,6 +7,7 @@ import { twJoin } from 'tailwind-merge';
 export const Image = ({
   component,
   onClick,
+  ref,
 }: ComponentProps<ImageComponent>) => {
   const { id, props } = component;
   const selectedComponent = useComponent();
@@ -22,6 +23,7 @@ export const Image = ({
 
   return (
     <img
+      ref={ref}
       onClick={onClick}
       src={props?.source.uri}
       alt={props?.alt}

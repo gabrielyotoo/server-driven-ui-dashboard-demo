@@ -5,7 +5,11 @@ import { cssBlockToStyle } from '../../utils/styles';
 import { ComponentRenderer } from '../component-renderer';
 import { twJoin } from 'tailwind-merge';
 
-export const View = ({ component, onClick }: ComponentProps<ViewComponent>) => {
+export const View = ({
+  component,
+  onClick,
+  ref,
+}: ComponentProps<ViewComponent>) => {
   const { id, props } = component;
   const selectedComponent = useComponent();
 
@@ -20,13 +24,14 @@ export const View = ({ component, onClick }: ComponentProps<ViewComponent>) => {
 
   return (
     <div
+      ref={ref}
       id={id}
       style={cssBlockToStyle(props?.style ?? '')}
       className={cClasses}
       onClick={onClick}
     >
-      {props?.children.map((child) => (
-        <ComponentRenderer component={child} onClick={() => {}} />
+      {props?.children.map((child, index) => (
+        <ComponentRenderer index={index} component={child} onClick={() => {}} />
       ))}
     </div>
   );

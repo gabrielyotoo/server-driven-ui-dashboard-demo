@@ -1,13 +1,25 @@
-import { useMemo } from 'react';
+import { useMemo, type DetailedHTMLProps } from 'react';
 import { useComponent } from '../../hooks/use-component';
 import type { ComponentProps, TextComponent } from '../../types';
 import { cssBlockToStyle } from '../../utils/styles';
 import { twJoin } from 'tailwind-merge';
 
-export const Text = ({ component, onClick }: ComponentProps<TextComponent>) => {
-  const { props, id } = component;
+export const Text = ({
+  component,
+  onClick,
+  ref,
+  ...props
+}: ComponentProps<TextComponent> &
+  DetailedHTMLProps<
+    React.HTMLAttributes<HTMLParagraphElement>,
+    HTMLParagraphElement
+  >) => {
+  const { props: cProps, id } = component;
 
   const selectedComponent = useComponent();
+  // const { ref } = useDraggable({
+  //   id: 'draggable',
+  // });
 
   const cClasses = useMemo(
     () =>
@@ -22,10 +34,12 @@ export const Text = ({ component, onClick }: ComponentProps<TextComponent>) => {
     <p
       id={id}
       className={cClasses}
-      style={cssBlockToStyle(props?.style ?? '')}
+      style={cssBlockToStyle(cProps?.style ?? '')}
       onClick={onClick}
+      {...props}
+      ref={ref}
     >
-      {!props?.children ? 'Altere o texto ao lado' : props.children}
+      {!cProps?.children ? 'Altere o texto ao lado' : cProps.children}
     </p>
   );
 };
