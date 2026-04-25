@@ -4,14 +4,18 @@ import type { ComponentProps, ViewComponent } from '../../types';
 import { cssBlockToStyle } from '../../utils/styles';
 import { ComponentRenderer } from '../component-renderer';
 import { twJoin } from 'tailwind-merge';
+import { useDroppable } from '@dnd-kit/react';
 
 export const View = ({
   component,
   onClick,
   ref,
 }: ComponentProps<ViewComponent>) => {
-  const { id, props } = component;
+  const { id, props, children } = component;
   const selectedComponent = useComponent();
+  const { ref: droppableRef } = useDroppable({
+    id,
+  });
 
   const cClasses = useMemo(
     () =>
@@ -24,14 +28,22 @@ export const View = ({
 
   return (
     <div
-      ref={ref}
+      ref={(el) => {
+        ref?.(el);
+        droppableRef(el);
+      }}
       id={id}
       style={cssBlockToStyle(props?.style ?? '')}
       className={cClasses}
       onClick={onClick}
     >
-      {props?.children.map((child, index) => (
-        <ComponentRenderer index={index} component={child} onClick={() => {}} />
+      {children.map((child, index) => (
+        <ComponentRenderer
+          key={child.id}
+          index={index}
+          component={child}
+          onClick={() => {}}
+        />
       ))}
     </div>
   );

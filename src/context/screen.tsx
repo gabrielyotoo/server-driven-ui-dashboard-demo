@@ -1,5 +1,11 @@
 import { createContext } from 'react';
-import type { Action, Component, Reducer, Screen } from '../types';
+import {
+  hasComponentChildren,
+  type Action,
+  type Component,
+  type Reducer,
+  type Screen,
+} from '../types';
 
 type SetScreenAction = Action<'SET_SCREEN', Screen | null>;
 type SetComponentsAction = Action<'SET_COMPONENTS', Component[]>;
@@ -12,13 +18,18 @@ type UpdateComponentOrderAction = Action<
   'UPDATE_COMPONENT_ORDER',
   { componentId: string; order: number }
 >;
+type AddChildrenToComponentAction = Action<
+  'ADD_CHILDREN_TO_COMPONENT',
+  { componentId: string; children: Component }
+>;
 
 type ScreenActions =
   | SetScreenAction
   | SetComponentsAction
   | UpdateComponentsAction
   | AddComponentAction
-  | UpdateComponentOrderAction;
+  | UpdateComponentOrderAction
+  | AddChildrenToComponentAction;
 
 export const ScreenContext = createContext<Screen | null>(null);
 export const ScreenDispatchContext = createContext<
@@ -116,6 +127,33 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
       return {
         ...state,
         components: newComponents,
+      };
+    }
+    case 'ADD_CHILDREN_TO_COMPONENT': {
+      if (!state) {
+        return state;
+      }
+      const componentToChange = state.components.find(
+        ({ id }) => id === payload.componentId,
+      );
+      if (!componentToChange || !hasComponentChildren(componentToChange)) {
+        return state;
+      }
+
+      const newChildren = [...componentToChange.children, payload.children];
+
+      return {
+        ...state,
+        components: [
+          ...state.components.filter(
+            ({ id }) =>
+              id !== payload.componentId && id !== payload.children.id,
+          ),
+          {
+            ...componentToChange,
+            children: newChildren,
+          } as Component,
+        ],
       };
     }
     default:

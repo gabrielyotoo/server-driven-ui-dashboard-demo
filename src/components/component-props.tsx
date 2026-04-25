@@ -19,44 +19,15 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
     }
 
     if (component.type === 'Text') {
-      return (
-        <TextPropsForm
-          key={component.id}
-          onChange={(values) => {
-            onChange({
-              ...values,
-              children: values.textValue,
-            });
-          }}
-        />
-      );
+      return <TextPropsForm key={component.id} onChange={onChange} />;
     }
 
     if (component.type === 'View') {
-      return (
-        <ViewPropsForm
-          key={component.id}
-          onChange={(values) => {
-            onChange({
-              ...values,
-              children: [],
-            });
-          }}
-        />
-      );
+      return <ViewPropsForm key={component.id} onChange={onChange} />;
     }
 
     if (component.type === 'Image') {
-      return (
-        <ImagePropsForm
-          key={component.id}
-          onChange={(values) => {
-            onChange({
-              ...values,
-            });
-          }}
-        />
-      );
+      return <ImagePropsForm key={component.id} onChange={onChange} />;
     }
   }, [component, onChange]);
 

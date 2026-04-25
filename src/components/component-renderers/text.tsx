@@ -14,7 +14,7 @@ export const Text = ({
     React.HTMLAttributes<HTMLParagraphElement>,
     HTMLParagraphElement
   >) => {
-  const { props: cProps, id } = component;
+  const { props: cProps, id, children } = component;
 
   const selectedComponent = useComponent();
   // const { ref } = useDraggable({
@@ -39,7 +39,7 @@ export const Text = ({
       {...props}
       ref={ref}
     >
-      {!cProps?.children ? 'Altere o texto ao lado' : cProps.children}
+      {!children ? 'Altere o texto ao lado' : children}
     </p>
   );
 };

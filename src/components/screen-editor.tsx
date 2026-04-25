@@ -5,7 +5,7 @@ import type { Component } from '../types';
 import { ComponentSelector } from './component-selector';
 import { ScreenRenderer } from './screen-renderer';
 import { ComponentProps } from './component-props';
-import { generateId } from '../utils/id';
+import { createNewComponent } from '../utils/component';
 
 export const ScreenEditor = () => {
   const [screen, dispatch] = useScreen();
@@ -22,10 +22,7 @@ export const ScreenEditor = () => {
   }
 
   const handleAddComponent = (componentType: Component['type']) => {
-    const newComponent: Omit<Component, 'order'> = {
-      type: componentType,
-      id: generateId(),
-    };
+    const newComponent = createNewComponent(componentType);
     setComponent(newComponent);
     dispatch({
       type: 'ADD_COMPONENT',

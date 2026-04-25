@@ -14,11 +14,11 @@ export const usePublishCode = () => (screen: Screen | null) => {
         base: {
           sections: screen.components.map((component) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { children, style, ...props } = component.props ?? {};
+            const { style, ...props } = component.props ?? {};
 
             return {
               props,
-              children: component.props?.children,
+              children: component.children,
               sectionComponentType: component.type,
               id: component.id,
               styles: cssToReactNative(component.props?.style),

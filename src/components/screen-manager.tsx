@@ -7,7 +7,7 @@ interface ScreenManagerProps {
 }
 
 export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
-  const currentScreen = useScreen();
+  const [currentScreen] = useScreen();
   const [screens, setScreens] = useState<Screen[]>([]);
 
   const handleCreateScreen = () => {

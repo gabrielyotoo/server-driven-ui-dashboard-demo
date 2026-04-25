@@ -14,9 +14,9 @@ export interface TextComponent extends ComponentBase {
   type: 'Text';
   props?: {
     numberOfLines: number;
-    children: string;
     style: string;
   };
+  children: string;
 }
 
 export interface ViewComponent extends ComponentBase {
@@ -24,9 +24,9 @@ export interface ViewComponent extends ComponentBase {
   props?: {
     scrollable: boolean;
     horizontal: boolean;
-    children: Component[];
     style: string;
   };
+  children: Component[];
 }
 
 export interface PressableComponent extends ComponentBase {
@@ -35,9 +35,9 @@ export interface PressableComponent extends ComponentBase {
     delayLongPress: number;
     disabled: boolean;
     pressRetentionOffset: number;
-    children: Component[];
     style: string;
   };
+  children: Component[];
 }
 
 export interface ImageComponent extends ComponentBase {
@@ -46,9 +46,9 @@ export interface ImageComponent extends ComponentBase {
     alt: string;
     resizeMode: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center';
     source: { uri: string };
-    children: never;
     style: string;
   };
+  children: never;
 }
 
 export interface GradientComponent extends ComponentBase {
@@ -56,9 +56,9 @@ export interface GradientComponent extends ComponentBase {
   props?: {
     colors: string[];
     locations: number[];
-    children: never;
     style: string;
   };
+  children: never;
 }
 
 export type Component =
@@ -78,3 +78,8 @@ export interface Screen {
   name: string;
   components: Component[];
 }
+
+export const hasComponentChildren = (
+  component: Component,
+): component is ViewComponent | PressableComponent =>
+  component.type === 'View' || component.type === 'Pressable';
