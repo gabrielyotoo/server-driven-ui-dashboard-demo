@@ -8,12 +8,17 @@ type UpdateComponentsAction = Action<
   { componentId: string; component: Partial<Component> }
 >;
 type AddComponentAction = Action<'ADD_COMPONENT', Omit<Component, 'order'>>;
+type UpdateComponentOrderAction = Action<
+  'UPDATE_COMPONENT_ORDER',
+  { componentId: string; order: number }
+>;
 
 type ScreenActions =
   | SetScreenAction
   | SetComponentsAction
   | UpdateComponentsAction
-  | AddComponentAction;
+  | AddComponentAction
+  | UpdateComponentOrderAction;
 
 export const ScreenContext = createContext<Screen | null>(null);
 export const ScreenDispatchContext = createContext<
@@ -73,6 +78,44 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
       return {
         ...state,
         components: [...state.components, { ...payload, order } as Component],
+      };
+    }
+    case 'UPDATE_COMPONENT_ORDER': {
+      if (!state) {
+        return state;
+      }
+      const componentToChange = state.components.find(
+        ({ id }) => id === payload.componentId,
+      );
+      if (!componentToChange) {
+        return state;
+      }
+
+      const oldOrder = componentToChange.order;
+
+      const newComponents = state.components.map((component) => {
+        if (payload.order < oldOrder) {
+          if (component.order >= payload.order && component.order < oldOrder) {
+            return { ...component, order: component.order + 1 };
+          }
+        }
+
+        if (payload.order > oldOrder) {
+          if (component.order <= payload.order && component.order > oldOrder) {
+            return { ...component, order: component.order - 1 };
+          }
+        }
+
+        if (payload.componentId === component.id) {
+          return { ...component, order: payload.order };
+        }
+
+        return component;
+      });
+
+      return {
+        ...state,
+        components: newComponents,
       };
     }
     default:
