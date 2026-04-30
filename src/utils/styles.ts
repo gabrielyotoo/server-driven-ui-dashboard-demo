@@ -52,6 +52,8 @@ const mapProperty = (prop: string): string | null => {
     'padding-bottom': 'paddingBottom',
     'padding-left': 'paddingLeft',
     'padding-right': 'paddingRight',
+    flex: 'flex',
+    display: 'display',
   };
 
   return map[prop] || null;

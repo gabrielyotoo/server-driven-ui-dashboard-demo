@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import { ScreenManager } from './components/screen-manager';
 import {
   ScreenContext,
@@ -10,12 +10,10 @@ import { usePublishCode } from './hooks/use-publish-code';
 
 function App() {
   const [screen, dispatch] = useReducer(screenReducer, null);
-  const publishCode = usePublishCode();
-
-  const [code, setCode] = useState('');
+  const { mutateAsync } = usePublishCode();
 
   const handlePublish = () => {
-    setCode(publishCode(screen));
+    mutateAsync(screen);
   };
 
   return (
@@ -37,7 +35,6 @@ function App() {
                 Publicar alterações
               </button>
             ) : null}
-            {code ? <pre className="px-4 text-start">{code}</pre> : null}
           </span>
         </div>
       </ScreenDispatchContext.Provider>

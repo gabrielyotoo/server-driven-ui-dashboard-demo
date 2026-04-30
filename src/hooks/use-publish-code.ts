@@ -1,34 +1,39 @@
+import { useMutation } from '@tanstack/react-query';
 import type { Screen } from '../types';
 import { cssToReactNative } from '../utils/styles';
+import { useHttp } from './use-http';
 
-export const usePublishCode = () => (screen: Screen | null) => {
-  if (!screen) {
-    return '';
-  }
+export const usePublishCode = () => {
+  const http = useHttp();
 
-  return JSON.stringify(
-    {
-      id: screen.name,
-      wide: {},
-      compact: {
-        base: {
-          sections: screen.components.map((component) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { style, ...props } = component.props ?? {};
+  const mutation = useMutation<void, Error, Screen | null>({
+    mutationFn: async (variables) => {
+      if (variables) {
+        await http.post('http://localhost:3000/api/screens', {
+          id: variables.name,
+          wide: {},
+          compact: {
+            base: {
+              sections: variables.components.map((component) => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { style, ...props } = component.props ?? {};
 
-            return {
-              props,
-              children: component.children,
-              sectionComponentType: component.type,
-              id: component.id,
-              styles: cssToReactNative(component.props?.style),
-            };
-          }),
-          order: 1,
-        },
-      },
+                return {
+                  props,
+                  children: component.children,
+                  sectionComponentType: component.type,
+                  id: component.id,
+                  styles: cssToReactNative(component.props?.style),
+                };
+              }),
+              order: 1,
+            },
+          },
+        });
+      }
     },
-    null,
-    2,
-  );
+    mutationKey: ['publish-screen'],
+  });
+
+  return mutation;
 };
