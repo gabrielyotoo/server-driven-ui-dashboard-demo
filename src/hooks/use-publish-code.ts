@@ -9,8 +9,7 @@ export const usePublishCode = () => {
   const mutation = useMutation<void, Error, Screen | null>({
     mutationFn: async (variables) => {
       if (variables) {
-        await http.post('http://localhost:3000/api/screens', {
-          id: variables.name,
+        await http.put(`http://localhost:3000/api/screens/${variables.id}`, {
           wide: {},
           compact: {
             base: {

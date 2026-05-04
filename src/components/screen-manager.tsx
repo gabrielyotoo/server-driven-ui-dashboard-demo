@@ -1,6 +1,8 @@
-import { useState } from 'react';
 import type { Screen } from '../types';
 import { useScreen } from '../hooks/use-screen';
+import { useCreateScreen } from '../hooks/use-create-screen';
+import { generateId } from '../utils/id';
+import { useScreens } from '../hooks/use-screens';
 
 interface ScreenManagerProps {
   onChangeScreen: (newScreen: Screen | null) => void;
@@ -8,9 +10,10 @@ interface ScreenManagerProps {
 
 export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
   const [currentScreen] = useScreen();
-  const [screens, setScreens] = useState<Screen[]>([]);
+  const [screens, dispatch] = useScreens();
+  const { mutateAsync } = useCreateScreen();
 
-  const handleCreateScreen = () => {
+  const handleCreateScreen = async () => {
     const baseName = 'Nova tela';
     const existingNames = new Set(screens.map((screen) => screen.name));
     let newName = baseName;
@@ -19,17 +22,28 @@ export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
       newName = `${baseName} (${counter})`;
       counter++;
     }
-    const newScreen: Screen = { name: newName, components: [] };
-    setScreens((prev) => [...prev, newScreen]);
+    const newScreen: Screen = {
+      id: generateId(),
+      name: newName,
+      components: [],
+    };
+    dispatch({
+      type: 'ADD_SCREEN',
+      payload: newScreen,
+    });
     onChangeScreen(newScreen);
+    await mutateAsync(newScreen);
   };
 
   const handleDeleteScreen = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    { name }: Screen,
+    { id }: Screen,
   ) => {
     e.stopPropagation();
-    setScreens((prev) => prev.filter((s) => s.name !== name));
+    dispatch({
+      type: 'REMOVE_SCREEN',
+      payload: id,
+    });
     onChangeScreen(null);
   };
 
@@ -41,7 +55,7 @@ export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
           <div
             className="whitespace-nowrap cursor-pointer"
             onClick={() => onChangeScreen(screen)}
-            key={screen.name}
+            key={screen.id}
           >
             <div className="flex flex-row gap-x-2">
               <p>{screen.name}</p>
@@ -52,7 +66,7 @@ export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
                 <p>x</p>
               </button>
             </div>
-            {screen.name === currentScreen?.name ? (
+            {screen.id === currentScreen?.id ? (
               <div className="h-1 bg-cyan-700" />
             ) : null}
           </div>

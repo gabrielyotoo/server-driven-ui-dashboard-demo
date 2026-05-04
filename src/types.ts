@@ -75,6 +75,7 @@ export interface ComponentProps<T extends Component> {
 }
 
 export interface Screen {
+  id: string;
   name: string;
   components: Component[];
 }

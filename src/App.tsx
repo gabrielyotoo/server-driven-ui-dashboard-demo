@@ -7,9 +7,15 @@ import {
 } from './context/screen';
 import { ScreenEditor } from './components/screen-editor';
 import { usePublishCode } from './hooks/use-publish-code';
+import {
+  ScreensContext,
+  ScreensDispatchContext,
+  screensReducer,
+} from './context/screens';
 
 function App() {
   const [screen, dispatch] = useReducer(screenReducer, null);
+  const [screens, dispatchScreens] = useReducer(screensReducer, []);
   const { mutateAsync } = usePublishCode();
 
   const handlePublish = () => {
@@ -17,28 +23,32 @@ function App() {
   };
 
   return (
-    <ScreenContext.Provider value={screen}>
-      <ScreenDispatchContext.Provider value={dispatch}>
-        <div className="flex flex-col">
-          <ScreenManager
-            onChangeScreen={(newScreen) =>
-              dispatch({ type: 'SET_SCREEN', payload: newScreen })
-            }
-          />
-          <ScreenEditor />
-          <span className="flex flex-col gap-y-6 w-[80%] my-10 self-center items-stretch">
-            {screen ? (
-              <button
-                className="bg-orange-600 text-white py-8 text-center rounded-lg cursor-pointer"
-                onClick={handlePublish}
-              >
-                Publicar alterações
-              </button>
-            ) : null}
-          </span>
-        </div>
-      </ScreenDispatchContext.Provider>
-    </ScreenContext.Provider>
+    <ScreensContext.Provider value={screens}>
+      <ScreensDispatchContext.Provider value={dispatchScreens}>
+        <ScreenContext.Provider value={screen}>
+          <ScreenDispatchContext.Provider value={dispatch}>
+            <div className="flex flex-col">
+              <ScreenManager
+                onChangeScreen={(newScreen) =>
+                  dispatch({ type: 'SET_SCREEN', payload: newScreen })
+                }
+              />
+              <ScreenEditor />
+              <span className="flex flex-col gap-y-6 w-[80%] my-10 self-center items-stretch">
+                {screen ? (
+                  <button
+                    className="bg-orange-600 text-white py-8 text-center rounded-lg cursor-pointer"
+                    onClick={handlePublish}
+                  >
+                    Publicar alterações
+                  </button>
+                ) : null}
+              </span>
+            </div>
+          </ScreenDispatchContext.Provider>
+        </ScreenContext.Provider>
+      </ScreensDispatchContext.Provider>
+    </ScreensContext.Provider>
   );
 }
 

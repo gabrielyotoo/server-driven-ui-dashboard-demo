@@ -6,9 +6,13 @@ import { ComponentSelector } from './component-selector';
 import { ScreenRenderer } from './screen-renderer';
 import { ComponentProps } from './component-props';
 import { createNewComponent } from '../utils/component';
+import { useScreens } from '../hooks/use-screens';
+import { useRenameScreen } from '../hooks/use-rename-screen';
 
 export const ScreenEditor = () => {
   const [screen, dispatch] = useScreen();
+  const [, dispatchScreens] = useScreens();
+  const { mutateAsync } = useRenameScreen();
   const [component, setComponent] = useState<null | Omit<Component, 'order'>>(
     null,
   );
@@ -48,9 +52,35 @@ export const ScreenEditor = () => {
     }
   };
 
+  const handleRename = async () => {
+    const newName = prompt('novo nome');
+    dispatchScreens({
+      type: 'UPDATE_SCREENS',
+      payload: {
+        id: screen.id,
+        screen: {
+          name: newName ?? screen.name,
+        },
+      },
+    });
+    dispatch({
+      type: 'SET_SCREEN',
+      payload: { ...screen, name: newName ?? screen.name },
+    });
+    await mutateAsync({ id: screen.id, name: newName ?? screen.name });
+  };
+
   return (
     <main>
-      <h1>{screen.name}</h1>
+      <header className="flex gap-x-4 w-full justify-center items-center">
+        <h1>{screen.name}</h1>
+        <button
+          className="bg-orange-600 cursor-pointer text-white px-4 py-1"
+          onClick={handleRename}
+        >
+          Renomear
+        </button>
+      </header>
       <form className="flex flex-row gap-x-2 justify-center">
         <input
           type="radio"
