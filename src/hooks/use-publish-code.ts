@@ -11,23 +11,19 @@ export const usePublishCode = () => {
       if (variables) {
         await http.put(`http://localhost:3000/api/screens/${variables.id}`, {
           wide: {},
-          compact: {
-            base: {
-              sections: variables.components.map((component) => {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { style, ...props } = component.props ?? {};
+          compact: variables.components.map((component) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { style, ...props } = component.props ?? {};
 
-                return {
-                  props,
-                  children: component.children,
-                  sectionComponentType: component.type,
-                  id: component.id,
-                  styles: cssToReactNative(component.props?.style),
-                };
-              }),
-              order: 1,
-            },
-          },
+            return {
+              props,
+              children: component.children,
+              sectionComponentType: component.type,
+              id: component.id,
+              styles: cssToReactNative(component.props?.style),
+              order: component.order,
+            };
+          }),
         });
       }
     },
