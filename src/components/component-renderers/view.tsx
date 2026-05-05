@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useComponent } from '../../hooks/use-component';
 import type { ComponentProps, ViewComponent } from '../../types';
-import { cssBlockToStyle } from '../../utils/styles';
 import { ComponentRenderer } from '../component-renderer';
 import { twJoin } from 'tailwind-merge';
 import { useDroppable } from '@dnd-kit/react';
@@ -21,9 +20,9 @@ export const View = ({
     () =>
       twJoin(
         'cursor-pointer',
-        selectedComponent.id === id ? 'bg-orange-600/10' : '',
+        selectedComponent?.id === id ? 'bg-orange-600/10' : '',
       ),
-    [selectedComponent.id, id],
+    [selectedComponent?.id, id],
   );
 
   return (
@@ -33,7 +32,7 @@ export const View = ({
         droppableRef(el);
       }}
       id={id}
-      style={cssBlockToStyle(props?.style ?? '')}
+      style={props?.style}
       className={cClasses}
       onClick={onClick}
     >

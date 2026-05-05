@@ -36,6 +36,9 @@ export const ScreenDispatchContext = createContext<
   React.Dispatch<ScreenActions>
 >(() => {});
 
+// mocked
+const layout = 'compact';
+
 export const screenReducer: Reducer<Screen | null, ScreenActions> = (
   state,
   { type, payload },
@@ -51,7 +54,7 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
 
       return {
         ...state,
-        components: payload,
+        [layout]: payload,
       };
     }
     case 'UPDATE_COMPONENTS': {
@@ -59,7 +62,7 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
         return state;
       }
 
-      const updatingComponent = state.components.find(
+      const updatingComponent = state[layout].find(
         ({ id }) => id === payload.componentId,
       );
       if (!updatingComponent) {
@@ -67,13 +70,13 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
       }
 
       const newComponents = [
-        ...state.components.filter(({ id }) => id !== payload.componentId),
+        ...state[layout].filter(({ id }) => id !== payload.componentId),
         { ...updatingComponent, ...payload.component } as Component,
       ];
 
       return {
         ...state,
-        components: newComponents,
+        [layout]: newComponents,
       };
     }
     case 'ADD_COMPONENT': {
@@ -82,20 +85,20 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
       }
 
       const order =
-        state.components.reduce((max, item) => {
+        state[layout].reduce((max, item) => {
           return item.order > max ? item.order : max;
         }, 0) + 1;
 
       return {
         ...state,
-        components: [...state.components, { ...payload, order } as Component],
+        [layout]: [...state[layout], { ...payload, order } as Component],
       };
     }
     case 'UPDATE_COMPONENT_ORDER': {
       if (!state) {
         return state;
       }
-      const componentToChange = state.components.find(
+      const componentToChange = state[layout].find(
         ({ id }) => id === payload.componentId,
       );
       if (!componentToChange) {
@@ -104,7 +107,7 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
 
       const oldOrder = componentToChange.order;
 
-      const newComponents = state.components.map((component) => {
+      const newComponents = state[layout].map((component) => {
         if (payload.order < oldOrder) {
           if (component.order >= payload.order && component.order < oldOrder) {
             return { ...component, order: component.order + 1 };
@@ -126,14 +129,14 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
 
       return {
         ...state,
-        components: newComponents,
+        [layout]: newComponents,
       };
     }
     case 'ADD_CHILDREN_TO_COMPONENT': {
       if (!state) {
         return state;
       }
-      const componentToChange = state.components.find(
+      const componentToChange = state[layout].find(
         ({ id }) => id === payload.componentId,
       );
       if (!componentToChange || !hasComponentChildren(componentToChange)) {
@@ -144,8 +147,8 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
 
       return {
         ...state,
-        components: [
-          ...state.components.filter(
+        [layout]: [
+          ...state[layout].filter(
             ({ id }) =>
               id !== payload.componentId && id !== payload.children.id,
           ),

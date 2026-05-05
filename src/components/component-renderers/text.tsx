@@ -1,7 +1,6 @@
 import { useMemo, type DetailedHTMLProps } from 'react';
 import { useComponent } from '../../hooks/use-component';
 import type { ComponentProps, TextComponent } from '../../types';
-import { cssBlockToStyle } from '../../utils/styles';
 import { twJoin } from 'tailwind-merge';
 
 export const Text = ({
@@ -25,16 +24,16 @@ export const Text = ({
     () =>
       twJoin(
         'cursor-pointer',
-        selectedComponent.id === id ? 'bg-orange-600/10' : '',
+        selectedComponent?.id === id ? 'bg-orange-600/10' : '',
       ),
-    [selectedComponent.id, id],
+    [selectedComponent?.id, id],
   );
 
   return (
     <p
       id={id}
       className={cClasses}
-      style={cssBlockToStyle(cProps?.style ?? '')}
+      style={cProps?.style}
       onClick={onClick}
       {...props}
       ref={ref}

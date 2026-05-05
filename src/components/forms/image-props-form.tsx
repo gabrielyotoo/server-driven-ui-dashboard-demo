@@ -7,11 +7,15 @@ import type { ImageComponent } from '../../types';
 import { useComponent } from '../../hooks/use-component';
 import { FormField } from '../form-field';
 import { FormSelector } from '../form-selector';
+import { cssBlockToStyle, styleToCssBlock } from '../../utils/styles';
 
-type ImagePropsFormValues = NonNullable<ImageComponent['props']>;
+type ImagePropsFormValues = Omit<
+  NonNullable<ImageComponent['props']>,
+  'style'
+> & { css: string };
 
 interface ImagePropsFormProps {
-  onChange: (form: ImagePropsFormValues) => void;
+  onChange: (form: NonNullable<ImageComponent['props']>) => void;
 }
 
 export const ImagePropsForm = ({ onChange }: ImagePropsFormProps) => {
@@ -19,14 +23,14 @@ export const ImagePropsForm = ({ onChange }: ImagePropsFormProps) => {
   const originalSrc = useRef('');
   const { control, setValue } = useForm<ImagePropsFormValues>({
     defaultValues: component?.props
-      ? component.props
+      ? { ...component.props, css: styleToCssBlock(component.props.style) }
       : {
           alt: '',
           resizeMode: 'contain',
           source: {
             uri: 'https://s3-alpha.figma.com/hub/file/4093188630/resized/800x480/561dfe3e-e5f8-415c-9b26-fbdf94897722-cover.png',
           },
-          style: `#${component.id} {
+          css: `#${component?.id ?? 'image'} {
             display: flex;
             flex: 1;
           }`,
@@ -35,7 +39,12 @@ export const ImagePropsForm = ({ onChange }: ImagePropsFormProps) => {
   const values = useWatch({ control });
 
   useEffect(() => {
-    onChange(values as ImagePropsFormValues);
+    const { css, ...rest } = values;
+
+    onChange({
+      ...rest,
+      style: cssBlockToStyle(css ?? ''),
+    } as NonNullable<ImageComponent['props']>);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
@@ -80,7 +89,7 @@ export const ImagePropsForm = ({ onChange }: ImagePropsFormProps) => {
         render={({ field }) => <FormField label="Imagem" {...field} />}
       />
       <Controller
-        name="style"
+        name="css"
         control={control}
         render={({ field }) => (
           <span className="bg-white">

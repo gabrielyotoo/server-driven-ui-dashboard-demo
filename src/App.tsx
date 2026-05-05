@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { ScreenManager } from './components/screen-manager';
 import {
   ScreenContext,
@@ -12,11 +12,22 @@ import {
   ScreensDispatchContext,
   screensReducer,
 } from './context/screens';
+import { useServerScreens } from './hooks/use-server-screens';
 
 function App() {
+  const { data } = useServerScreens();
   const [screen, dispatch] = useReducer(screenReducer, null);
   const [screens, dispatchScreens] = useReducer(screensReducer, []);
   const { mutateAsync } = usePublishCode();
+
+  useEffect(() => {
+    if (data) {
+      dispatchScreens({
+        type: 'SET_SCREENS',
+        payload: data,
+      });
+    }
+  }, [data]);
 
   const handlePublish = () => {
     mutateAsync(screen);

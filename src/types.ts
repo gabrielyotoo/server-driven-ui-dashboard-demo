@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export type Action<T extends string, P> = {
   type: T;
   payload: P;
@@ -11,52 +13,52 @@ interface ComponentBase {
 }
 
 export interface TextComponent extends ComponentBase {
-  type: 'Text';
+  sectionComponentType: 'Text';
   props?: {
     numberOfLines: number;
-    style: string;
+    style: CSSProperties;
   };
   children: string;
 }
 
 export interface ViewComponent extends ComponentBase {
-  type: 'View';
+  sectionComponentType: 'View';
   props?: {
     scrollable: boolean;
     horizontal: boolean;
-    style: string;
+    style: CSSProperties;
   };
   children: Component[];
 }
 
 export interface PressableComponent extends ComponentBase {
-  type: 'Pressable';
+  sectionComponentType: 'Pressable';
   props?: {
     delayLongPress: number;
     disabled: boolean;
     pressRetentionOffset: number;
-    style: string;
+    style: CSSProperties;
   };
   children: Component[];
 }
 
 export interface ImageComponent extends ComponentBase {
-  type: 'Image';
+  sectionComponentType: 'Image';
   props?: {
     alt: string;
     resizeMode: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center';
     source: { uri: string };
-    style: string;
+    style: CSSProperties;
   };
   children: never;
 }
 
 export interface GradientComponent extends ComponentBase {
-  type: 'Gradient';
+  sectionComponentType: 'Gradient';
   props?: {
     colors: string[];
     locations: number[];
-    style: string;
+    style: CSSProperties;
   };
   children: never;
 }
@@ -77,10 +79,12 @@ export interface ComponentProps<T extends Component> {
 export interface Screen {
   id: string;
   name: string;
-  components: Component[];
+  wide: Component[];
+  compact: Component[];
 }
 
 export const hasComponentChildren = (
   component: Component,
 ): component is ViewComponent | PressableComponent =>
-  component.type === 'View' || component.type === 'Pressable';
+  component.sectionComponentType === 'View' ||
+  component.sectionComponentType === 'Pressable';

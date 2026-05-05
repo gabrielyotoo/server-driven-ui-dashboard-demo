@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import type { Screen } from '../types';
-import { cssToReactNative } from '../utils/styles';
 import { useHttp } from './use-http';
+import { cssToReactNative, styleToCssBlock } from '../utils/styles';
 
 export const usePublishCode = () => {
   const http = useHttp();
@@ -10,20 +10,19 @@ export const usePublishCode = () => {
     mutationFn: async (variables) => {
       if (variables) {
         await http.put(`http://localhost:3000/api/screens/${variables.id}`, {
-          wide: {},
-          compact: variables.components.map((component) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { style, ...props } = component.props ?? {};
-
-            return {
-              props,
-              children: component.children,
-              sectionComponentType: component.type,
-              id: component.id,
-              styles: cssToReactNative(component.props?.style),
-              order: component.order,
-            };
-          }),
+          wide: [],
+          compact: variables.compact.map((component) => ({
+            props: {
+              ...component.props,
+              style: cssToReactNative(
+                styleToCssBlock(component.props?.style ?? {}),
+              ),
+            },
+            children: component.children,
+            sectionComponentType: component.sectionComponentType,
+            id: component.id,
+            order: component.order,
+          })),
         });
       }
     },

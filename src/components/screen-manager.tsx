@@ -25,7 +25,8 @@ export const ScreenManager = ({ onChangeScreen }: ScreenManagerProps) => {
     const newScreen: Screen = {
       id: generateId(),
       name: newName,
-      components: [],
+      compact: [],
+      wide: [],
     };
     dispatch({
       type: 'ADD_SCREEN',

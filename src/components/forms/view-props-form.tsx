@@ -6,14 +6,15 @@ import StyleEditor from 'react-style-editor';
 import type { ViewComponent } from '../../types';
 import { useComponent } from '../../hooks/use-component';
 import { FormCheckbox } from '../form-checkbox';
+import { cssBlockToStyle } from '../../utils/styles';
 
 type ViewPropsFormValues = Omit<
   NonNullable<ViewComponent['props']>,
-  'children'
->;
+  'children' | 'style'
+> & { css: string };
 
 interface ViewPropsFormProps {
-  onChange: (form: ViewPropsFormValues) => void;
+  onChange: (form: NonNullable<ViewComponent['props']>) => void;
 }
 
 export const ViewPropsForm = ({ onChange }: ViewPropsFormProps) => {
@@ -23,7 +24,7 @@ export const ViewPropsForm = ({ onChange }: ViewPropsFormProps) => {
       ? component.props
       : {
           scrollable: true,
-          style: `#${component.id} {
+          css: `#${component?.id ?? 'view'} {
             display: flex;
             flex: 1;
           }`,
@@ -33,7 +34,11 @@ export const ViewPropsForm = ({ onChange }: ViewPropsFormProps) => {
   const values = useWatch({ control });
 
   useEffect(() => {
-    onChange(values as ViewPropsFormValues);
+    const { css, ...rest } = values;
+    onChange({
+      ...rest,
+      style: cssBlockToStyle(css ?? ''),
+    } as NonNullable<ViewComponent['props']>);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
@@ -52,7 +57,7 @@ export const ViewPropsForm = ({ onChange }: ViewPropsFormProps) => {
         />
       ) : null}
       <Controller
-        name="style"
+        name="css"
         control={control}
         render={({ field }) => (
           <span className="bg-white">

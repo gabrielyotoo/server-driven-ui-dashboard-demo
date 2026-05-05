@@ -18,15 +18,15 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
       return null;
     }
 
-    if (component.type === 'Text') {
+    if (component.sectionComponentType === 'Text') {
       return <TextPropsForm key={component.id} onChange={onChange} />;
     }
 
-    if (component.type === 'View') {
+    if (component.sectionComponentType === 'View') {
       return <ViewPropsForm key={component.id} onChange={onChange} />;
     }
 
-    if (component.type === 'Image') {
+    if (component.sectionComponentType === 'Image') {
       return <ImagePropsForm key={component.id} onChange={onChange} />;
     }
   }, [component, onChange]);

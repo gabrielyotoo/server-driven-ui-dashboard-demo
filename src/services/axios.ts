@@ -5,6 +5,7 @@ export class AxiosClient {
 
   constructor() {
     this.instance = axios.create();
+    this.instance.defaults.baseURL = 'http://localhost:3000/api/';
 
     this.instance.interceptors.response.use(
       (r) => r,

@@ -9,6 +9,9 @@ import { createNewComponent } from '../utils/component';
 import { useScreens } from '../hooks/use-screens';
 import { useRenameScreen } from '../hooks/use-rename-screen';
 
+// mocked
+const layout = 'compact';
+
 export const ScreenEditor = () => {
   const [screen, dispatch] = useScreen();
   const [, dispatchScreens] = useScreens();
@@ -25,7 +28,9 @@ export const ScreenEditor = () => {
     );
   }
 
-  const handleAddComponent = (componentType: Component['type']) => {
+  const handleAddComponent = (
+    componentType: Component['sectionComponentType'],
+  ) => {
     const newComponent = createNewComponent(componentType);
     setComponent(newComponent);
     dispatch({
@@ -36,7 +41,7 @@ export const ScreenEditor = () => {
 
   const handlePropsChange = (props: Component['props']) => {
     setComponent((prev) => (prev ? ({ ...prev, props } as Component) : null));
-    const currentComponent = screen.components.find(
+    const currentComponent = screen[layout].find(
       ({ id }) => id === component?.id,
     );
     if (currentComponent) {

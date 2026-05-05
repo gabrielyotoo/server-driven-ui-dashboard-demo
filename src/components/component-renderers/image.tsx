@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useComponent } from '../../hooks/use-component';
 import type { ComponentProps, ImageComponent } from '../../types';
-import { cssBlockToStyle, resizeModeToObjectFit } from '../../utils/styles';
+import { resizeModeToObjectFit } from '../../utils/styles';
 import { twJoin } from 'tailwind-merge';
 
 export const Image = ({
@@ -16,9 +16,9 @@ export const Image = ({
     () =>
       twJoin(
         'cursor-pointer',
-        selectedComponent.id === id ? 'bg-orange-600/10' : '',
+        selectedComponent?.id === id ? 'bg-orange-600/10' : '',
       ),
-    [selectedComponent.id, id],
+    [selectedComponent?.id, id],
   );
 
   return (
@@ -29,7 +29,7 @@ export const Image = ({
       alt={props?.alt}
       className={cClasses}
       style={{
-        ...cssBlockToStyle(props?.style ?? ''),
+        ...props?.style,
         ...(props?.resizeMode
           ? { ...resizeModeToObjectFit(props?.resizeMode) }
           : {}),

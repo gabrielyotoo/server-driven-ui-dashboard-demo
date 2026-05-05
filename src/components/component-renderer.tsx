@@ -19,15 +19,15 @@ export const ComponentRenderer = ({
   const { ref } = useSortable({ id: component.id, index });
 
   const componentRender = useMemo(() => {
-    if (component.type === 'Text') {
+    if (component.sectionComponentType === 'Text') {
       return <Text component={component} />;
     }
 
-    if (component.type === 'View') {
+    if (component.sectionComponentType === 'View') {
       return <View component={component} />;
     }
 
-    if (component.type === 'Image') {
+    if (component.sectionComponentType === 'Image') {
       return <Image component={component} />;
     }
 

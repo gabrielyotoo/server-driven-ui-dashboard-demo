@@ -7,11 +7,13 @@ type UpdateScreensAction = Action<
 >;
 type AddScreenAction = Action<'ADD_SCREEN', Screen>;
 type RemoveScreenAction = Action<'REMOVE_SCREEN', string>;
+type SetScreensAction = Action<'SET_SCREENS', Screen[]>;
 
 type ScreensActions =
   | UpdateScreensAction
   | AddScreenAction
-  | RemoveScreenAction;
+  | RemoveScreenAction
+  | SetScreensAction;
 
 export const ScreensContext = createContext<Screen[]>([]);
 export const ScreensDispatchContext = createContext<
@@ -33,6 +35,9 @@ export const screensReducer: Reducer<Screen[], ScreensActions> = (
     }
     case 'REMOVE_SCREEN': {
       return state.filter(({ id }) => id !== payload);
+    }
+    case 'SET_SCREENS': {
+      return payload;
     }
     default:
       return state;

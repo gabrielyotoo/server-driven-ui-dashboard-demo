@@ -32,6 +32,29 @@ export const cssBlockToStyle = (css: string): CSSProperties => {
   return result;
 };
 
+export const styleToCssBlock = (
+  style: React.CSSProperties,
+  selector?: string,
+): string => {
+  const toKebabCase = (str: string) =>
+    str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+
+  const declarations = Object.entries(style)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(([_, value]) => value !== null && value !== undefined)
+    .map(([key, value]) => {
+      const kebabKey = toKebabCase(key);
+      return `${kebabKey}: ${value}`;
+    })
+    .join(';\n');
+
+  if (selector) {
+    return `${selector} {\n${declarations};\n}`;
+  }
+
+  return `${declarations};`;
+};
+
 type RNStyle = Record<string, string | number>;
 
 const mapProperty = (prop: string): string | null => {
@@ -54,6 +77,9 @@ const mapProperty = (prop: string): string | null => {
     'padding-right': 'paddingRight',
     flex: 'flex',
     display: 'display',
+    'flex-grow': 'flexGrow',
+    'flex-shrink': 'flexShrink',
+    'flex-basis': 'flexBasis',
   };
 
   return map[prop] || null;

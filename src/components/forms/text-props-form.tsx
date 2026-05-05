@@ -6,16 +6,18 @@ import { useEffect } from 'react';
 import StyleEditor from 'react-style-editor';
 import type { TextComponent } from '../../types';
 import { useComponent } from '../../hooks/use-component';
+import { cssBlockToStyle } from '../../utils/styles';
 
 interface TextPropsFormValues extends Omit<
   NonNullable<TextComponent['props']>,
-  'children'
+  'children' | 'style'
 > {
   textValue: string;
+  css: string;
 }
 
 interface TextPropsFormProps {
-  onChange: (form: TextPropsFormValues) => void;
+  onChange: (form: NonNullable<TextComponent['props']>) => void;
 }
 
 export const TextPropsForm = ({ onChange }: TextPropsFormProps) => {
@@ -24,12 +26,12 @@ export const TextPropsForm = ({ onChange }: TextPropsFormProps) => {
     defaultValues: component?.props
       ? {
           ...component.props,
-          textValue: component.props.children,
+          textValue: component.children,
         }
       : {
           textValue: '',
           numberOfLines: 1,
-          style: `#${component.id} {
+          css: `#${component?.id ?? 'text'} {
             text-align: center;
           }`,
         },
@@ -37,7 +39,11 @@ export const TextPropsForm = ({ onChange }: TextPropsFormProps) => {
   const values = useWatch({ control });
 
   useEffect(() => {
-    onChange(values as TextPropsFormValues);
+    const { css, ...rest } = values;
+    onChange({
+      ...rest,
+      style: cssBlockToStyle(css ?? ''),
+    } as NonNullable<TextComponent['props']>);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
@@ -62,7 +68,7 @@ export const TextPropsForm = ({ onChange }: TextPropsFormProps) => {
         )}
       />
       <Controller
-        name="style"
+        name="css"
         control={control}
         render={({ field }) => (
           <span className="bg-white">
