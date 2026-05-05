@@ -8,9 +8,10 @@ import { ImagePropsForm } from './forms/image-props-form';
 
 interface ComponentPropsProps {
   onChange: (props: Component['props']) => void;
+  onDelete: (id: string) => void;
 }
 
-export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
+export const ComponentProps = ({ onChange, onDelete }: ComponentPropsProps) => {
   const component = useComponent();
 
   const form = useMemo(() => {
@@ -31,11 +32,21 @@ export const ComponentProps = ({ onChange }: ComponentPropsProps) => {
     }
   }, [component, onChange]);
 
+  if (!component) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-y-2">
-      <FormField label="Id" disabled value={component?.id ?? ''} />
-      <FormField label="Order" disabled value={component?.order ?? ''} />
+      <FormField label="Id" disabled value={component.id} />
+      <FormField label="Order" disabled value={component.order} />
       {form}
+      <button
+        className="bg-orange-600 rounded-md text-white py-4 cursor-pointer"
+        onClick={() => onDelete(component.id)}
+      >
+        Apagar
+      </button>
     </div>
   );
 };

@@ -22,6 +22,7 @@ type AddChildrenToComponentAction = Action<
   'ADD_CHILDREN_TO_COMPONENT',
   { componentId: string; children: Component }
 >;
+type DeleteComponentAction = Action<'DELETE_COMPONENT', string>;
 
 type ScreenActions =
   | SetScreenAction
@@ -29,7 +30,8 @@ type ScreenActions =
   | UpdateComponentsAction
   | AddComponentAction
   | UpdateComponentOrderAction
-  | AddChildrenToComponentAction;
+  | AddChildrenToComponentAction
+  | DeleteComponentAction;
 
 export const ScreenContext = createContext<Screen | null>(null);
 export const ScreenDispatchContext = createContext<
@@ -157,6 +159,16 @@ export const screenReducer: Reducer<Screen | null, ScreenActions> = (
             children: newChildren,
           } as Component,
         ],
+      };
+    }
+    case 'DELETE_COMPONENT': {
+      if (!state) {
+        return state;
+      }
+
+      return {
+        ...state,
+        [layout]: [...state[layout].filter(({ id }) => id !== payload)],
       };
     }
     default:

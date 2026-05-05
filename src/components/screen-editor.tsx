@@ -75,6 +75,14 @@ export const ScreenEditor = () => {
     await mutateAsync({ id: screen.id, name: newName ?? screen.name });
   };
 
+  const handleDeleteComponent = (id: string) => {
+    dispatch({
+      type: 'DELETE_COMPONENT',
+      payload: id,
+    });
+    setComponent(null);
+  };
+
   return (
     <main>
       <header className="flex gap-x-4 w-full justify-center items-center">
@@ -103,7 +111,10 @@ export const ScreenEditor = () => {
           <ScreenRenderer onComponentClick={setComponent} />
           <aside className="flex flex-col items-start gap-y-6">
             <ComponentSelector onAdd={handleAddComponent} />
-            <ComponentProps onChange={handlePropsChange} />
+            <ComponentProps
+              onChange={handlePropsChange}
+              onDelete={handleDeleteComponent}
+            />
           </aside>
         </span>
       </ComponentContext.Provider>
