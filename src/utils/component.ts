@@ -1,4 +1,10 @@
-import type { Component, GradientComponent, ImageComponent } from '../types';
+import {
+  PressableActionType,
+  type Component,
+  type GradientComponent,
+  type ImageComponent,
+  type PressableComponent,
+} from '../types';
 import { generateId } from './id';
 
 export const createNewComponent = (
@@ -11,12 +17,20 @@ export const createNewComponent = (
       children: '',
     };
   }
-  if (type === 'Pressable' || type === 'View') {
+  if (type === 'View') {
     return {
       sectionComponentType: type,
       id: generateId(),
       children: [],
     };
+  }
+  if (type === 'Pressable') {
+    return {
+      sectionComponentType: type,
+      id: generateId(),
+      children: [],
+      action: { type: PressableActionType.NavigateTo, to: '' },
+    } as Omit<PressableComponent, 'order'>;
   }
 
   return {

@@ -1,12 +1,17 @@
 import { useId, type DetailedHTMLProps } from 'react';
 
+interface Option {
+  value: string;
+  text: string;
+}
+
 interface FormSelectorProps extends DetailedHTMLProps<
   React.SelectHTMLAttributes<HTMLSelectElement>,
   HTMLSelectElement
 > {
   label: string;
   helperText?: string;
-  options: string[];
+  options: Option[] | string[];
 }
 
 export const FormSelector = ({
@@ -24,9 +29,16 @@ export const FormSelector = ({
           {label}
         </label>
         <select id={id} name={id} {...props}>
-          {options.map((option) => (
-            <option key={option}>{option}</option>
-          ))}
+          {options.map((option) => {
+            const text = typeof option === 'string' ? option : option.text;
+            const value = typeof option === 'string' ? option : option.value;
+
+            return (
+              <option key={text} value={value}>
+                {text}
+              </option>
+            );
+          })}
         </select>
       </span>
       {helperText ? (

@@ -20,6 +20,10 @@ export const usePublishCode = () => {
             sectionComponentType: component.sectionComponentType,
             id: component.id,
             order: component.order,
+            action:
+              component.sectionComponentType === 'Pressable'
+                ? component.action
+                : undefined,
           })),
         });
       }

@@ -33,6 +33,36 @@ export interface ViewComponent extends ComponentBase {
 
 export type Rect = { bottom: number; left: number; right: number; top: number };
 
+export const PressableActionType = {
+  NavigateBack: 'NavigateBack',
+  NavigateTo: 'NavigateTo',
+  PostRequest: 'PostRequest',
+} as const;
+
+export type PressableActionType =
+  (typeof PressableActionType)[keyof typeof PressableActionType];
+
+interface NavigateBackAction {
+  type: typeof PressableActionType.NavigateBack;
+}
+
+interface NavigateToAction {
+  type: typeof PressableActionType.NavigateTo;
+  to: string;
+}
+
+interface PostRequestAction<T> {
+  type: typeof PressableActionType.PostRequest;
+  api: 'pagol';
+  endpoint: 'register';
+  body: T;
+}
+
+export type PressableAction<T = unknown> =
+  | NavigateToAction
+  | NavigateBackAction
+  | PostRequestAction<T>;
+
 export interface PressableComponent extends ComponentBase {
   sectionComponentType: 'Pressable';
   props?: {
@@ -42,6 +72,7 @@ export interface PressableComponent extends ComponentBase {
     style: CSSProperties;
   };
   children: Component[];
+  action: PressableAction;
 }
 
 export interface ImageComponent extends ComponentBase {

@@ -2,17 +2,22 @@ import { useMemo } from 'react';
 import { useComponent } from '../hooks/use-component';
 import { TextPropsForm } from './forms/text-props-form';
 import { FormField } from './form-field';
-import type { Component } from '../types';
+import type { Component, PressableComponent } from '../types';
 import { ViewPropsForm } from './forms/view-props-form';
 import { ImagePropsForm } from './forms/image-props-form';
 import { PressablePropsForm } from './forms/pressable-props-form';
 
 interface ComponentPropsProps {
   onChange: (props: Component['props']) => void;
+  onPressableValuesChange: (values: PressableComponent['action']) => void;
   onDelete: (id: string) => void;
 }
 
-export const ComponentProps = ({ onChange, onDelete }: ComponentPropsProps) => {
+export const ComponentProps = ({
+  onChange,
+  onPressableValuesChange,
+  onDelete,
+}: ComponentPropsProps) => {
   const component = useComponent();
 
   const form = useMemo(() => {
@@ -33,9 +38,15 @@ export const ComponentProps = ({ onChange, onDelete }: ComponentPropsProps) => {
     }
 
     if (component.sectionComponentType === 'Pressable') {
-      return <PressablePropsForm key={component.id} onChange={onChange} />;
+      return (
+        <PressablePropsForm
+          key={component.id}
+          onChange={onChange}
+          onChangeValues={onPressableValuesChange}
+        />
+      );
     }
-  }, [component, onChange]);
+  }, [component, onChange, onPressableValuesChange]);
 
   if (!component || !component.id) {
     return null;

@@ -35,8 +35,6 @@ export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
           const { initialIndex, index, id } = source;
 
           if (initialIndex !== index) {
-            console.log(index);
-
             dispatch({
               type: 'UPDATE_COMPONENT_ORDER',
               payload: {

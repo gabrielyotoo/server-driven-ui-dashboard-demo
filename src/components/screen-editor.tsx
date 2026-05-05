@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ComponentContext } from '../context/component';
 import { useScreen } from '../hooks/use-screen';
-import type { Component } from '../types';
+import type { Component, PressableComponent } from '../types';
 import { ComponentSelector } from './component-selector';
 import { ScreenRenderer } from './screen-renderer';
 import { ComponentProps } from './component-props';
@@ -51,6 +51,31 @@ export const ScreenEditor = () => {
           componentId: currentComponent.id,
           component: {
             props,
+          } as Component,
+        },
+      });
+    }
+  };
+
+  const handlePressableValuesChange = (
+    values: PressableComponent['action'],
+  ) => {
+    setComponent((prev) =>
+      prev ? ({ ...prev, action: values } as Component) : null,
+    );
+    const currentComponent = screen[layout].find(
+      ({ id }) => id === component?.id,
+    );
+    if (
+      currentComponent &&
+      currentComponent.sectionComponentType === 'Pressable'
+    ) {
+      dispatch({
+        type: 'UPDATE_COMPONENTS',
+        payload: {
+          componentId: currentComponent.id,
+          component: {
+            action: values,
           } as Component,
         },
       });
@@ -114,6 +139,7 @@ export const ScreenEditor = () => {
             <ComponentProps
               onChange={handlePropsChange}
               onDelete={handleDeleteComponent}
+              onPressableValuesChange={handlePressableValuesChange}
             />
           </aside>
         </span>
