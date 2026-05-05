@@ -30,25 +30,13 @@ export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
         }
 
         const { source } = event.operation;
-        if (overDroppable.current && source) {
-          dispatch({
-            type: 'ADD_CHILDREN_TO_COMPONENT',
-            payload: {
-              componentId: overDroppable.current.id,
-              children: {
-                id: source.id.toString(),
-                order: 1,
-                type: 'Text',
-                children: '',
-              },
-            },
-          });
-        }
 
         if (isSortable(source)) {
           const { initialIndex, index, id } = source;
 
           if (initialIndex !== index) {
+            console.log(index);
+
             dispatch({
               type: 'UPDATE_COMPONENT_ORDER',
               payload: {
@@ -59,21 +47,6 @@ export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
           }
         }
       }}
-      onDragOver={(event) => {
-        const { target, source } = event.operation;
-        if (target?.element?.tagName === 'DIV')
-          overDroppable.current = target?.element ?? null;
-        if (
-          source?.element?.tagName === 'DIV' &&
-          target?.element?.tagName === 'DIV'
-        )
-          event.preventDefault();
-      }}
-      // onDragMove={(event) => {
-      //   if (overDroppable.current?.id !== 'screen') {
-      //     event.preventDefault();
-      //   }
-      // }}
     >
       <div
         className="w-compact-w h-compact-h bg-white flex flex-col"
