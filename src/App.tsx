@@ -26,6 +26,10 @@ function App() {
         type: 'SET_SCREENS',
         payload: data,
       });
+      dispatch({
+        type: 'SET_SCREEN',
+        payload: data.at(0) ?? null,
+      });
     }
   }, [data]);
 
