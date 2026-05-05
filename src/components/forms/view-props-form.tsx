@@ -6,7 +6,7 @@ import StyleEditor from 'react-style-editor';
 import type { ViewComponent } from '../../types';
 import { useComponent } from '../../hooks/use-component';
 import { FormCheckbox } from '../form-checkbox';
-import { cssBlockToStyle } from '../../utils/styles';
+import { cssBlockToStyle, styleToCssBlock } from '../../utils/styles';
 
 type ViewPropsFormValues = Omit<
   NonNullable<ViewComponent['props']>,
@@ -21,7 +21,12 @@ export const ViewPropsForm = ({ onChange }: ViewPropsFormProps) => {
   const component = useComponent<ViewComponent>();
   const { control } = useForm<ViewPropsFormValues>({
     defaultValues: component?.props
-      ? component.props
+      ? {
+          ...component.props,
+          css: `#${component?.id ?? 'view'} {
+            ${styleToCssBlock(component.props.style)}
+          }`,
+        }
       : {
           scrollable: true,
           css: `#${component?.id ?? 'view'} {

@@ -23,7 +23,12 @@ export const ImagePropsForm = ({ onChange }: ImagePropsFormProps) => {
   const originalSrc = useRef('');
   const { control, setValue } = useForm<ImagePropsFormValues>({
     defaultValues: component?.props
-      ? { ...component.props, css: styleToCssBlock(component.props.style) }
+      ? {
+          ...component.props,
+          css: `#${component?.id ?? 'image'} {
+            ${styleToCssBlock(component.props.style)}
+          }`,
+        }
       : {
           alt: '',
           resizeMode: 'contain',

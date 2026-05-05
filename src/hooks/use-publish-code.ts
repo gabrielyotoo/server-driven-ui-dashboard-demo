@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import type { Screen } from '../types';
 import { useHttp } from './use-http';
-import { cssToReactNative, styleToCssBlock } from '../utils/styles';
+import { styleToReactNative } from '../utils/styles';
 
 export const usePublishCode = () => {
   const http = useHttp();
@@ -14,9 +14,7 @@ export const usePublishCode = () => {
           compact: variables.compact.map((component) => ({
             props: {
               ...component.props,
-              style: cssToReactNative(
-                styleToCssBlock(component.props?.style ?? {}),
-              ),
+              style: styleToReactNative(component.props?.style ?? {}),
             },
             children: component.children,
             sectionComponentType: component.sectionComponentType,

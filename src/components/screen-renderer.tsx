@@ -9,6 +9,8 @@ interface ScreenRendererProps {
   onComponentClick: (component: Component) => void;
 }
 
+const layout = 'compact';
+
 export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
   const [screen, dispatch] = useScreen();
   const { ref } = useDroppable({
@@ -78,7 +80,7 @@ export const ScreenRenderer = ({ onComponentClick }: ScreenRendererProps) => {
         ref={ref}
         id="screen"
       >
-        {screen.components
+        {screen[layout]
           .sort((a, b) => a.order - b.order)
           .map((component, index) => (
             <ComponentRenderer

@@ -57,34 +57,6 @@ export const styleToCssBlock = (
 
 type RNStyle = Record<string, string | number>;
 
-const mapProperty = (prop: string): string | null => {
-  const map: Record<string, string> = {
-    color: 'color',
-    'background-color': 'backgroundColor',
-    'font-size': 'fontSize',
-    'font-weight': 'fontWeight',
-    'text-align': 'textAlign',
-    'line-height': 'lineHeight',
-    margin: 'margin',
-    'margin-top': 'marginTop',
-    'margin-bottom': 'marginBottom',
-    'margin-left': 'marginLeft',
-    'margin-right': 'marginRight',
-    padding: 'padding',
-    'padding-top': 'paddingTop',
-    'padding-bottom': 'paddingBottom',
-    'padding-left': 'paddingLeft',
-    'padding-right': 'paddingRight',
-    flex: 'flex',
-    display: 'display',
-    'flex-grow': 'flexGrow',
-    'flex-shrink': 'flexShrink',
-    'flex-basis': 'flexBasis',
-  };
-
-  return map[prop] || null;
-};
-
 const mapValue = (prop: string, value: string) => {
   if (value.endsWith('px')) {
     return Number(value.replace('px', ''));
@@ -101,30 +73,24 @@ const mapValue = (prop: string, value: string) => {
   return value;
 };
 
-export const cssToReactNative = (css: string | undefined): RNStyle => {
-  if (!css) {
+export const styleToReactNative = (
+  style: CSSProperties | undefined,
+): RNStyle => {
+  if (!style) {
     return {};
   }
 
   const result: RNStyle = {};
 
-  const cleaned = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  Object.entries(style).forEach((rule) => {
+    const [prop, rawValue] = rule;
+    if (!prop || !rawValue) return;
 
-  cleaned.split(';').forEach((rule) => {
-    if (!rule.trim()) return;
-
-    const [rawProp, rawValue] = rule.split(':');
-    if (!rawProp || !rawValue) return;
-
-    const cssProp = rawProp.trim();
     const cssValue = rawValue.trim();
 
-    const rnProp = mapProperty(cssProp);
-    if (!rnProp) return;
+    const rnValue = mapValue(prop, cssValue);
 
-    const rnValue = mapValue(rnProp, cssValue);
-
-    result[rnProp] = rnValue;
+    result[prop] = rnValue;
   });
 
   return result;

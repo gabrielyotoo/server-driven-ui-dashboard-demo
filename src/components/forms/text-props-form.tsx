@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import StyleEditor from 'react-style-editor';
 import type { TextComponent } from '../../types';
 import { useComponent } from '../../hooks/use-component';
-import { cssBlockToStyle } from '../../utils/styles';
+import { cssBlockToStyle, styleToCssBlock } from '../../utils/styles';
 
 interface TextPropsFormValues extends Omit<
   NonNullable<TextComponent['props']>,
@@ -27,6 +27,9 @@ export const TextPropsForm = ({ onChange }: TextPropsFormProps) => {
       ? {
           ...component.props,
           textValue: component.children,
+          css: `#${component?.id ?? 'text'} {
+            ${styleToCssBlock(component.props.style)}
+          }`,
         }
       : {
           textValue: '',
