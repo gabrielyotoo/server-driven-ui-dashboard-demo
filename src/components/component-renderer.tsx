@@ -4,6 +4,7 @@ import { Text } from './component-renderers/text';
 import { View } from './component-renderers/view';
 import { Image } from './component-renderers/image';
 import { useSortable } from '@dnd-kit/react/sortable';
+import { Pressable } from './component-renderers/pressable';
 
 interface ComponentRendererProps {
   component: Component;
@@ -31,7 +32,11 @@ export const ComponentRenderer = ({
       return <Image component={component} />;
     }
 
-    return <></>;
+    if (component.sectionComponentType === 'Pressable') {
+      return <Pressable component={component} />;
+    }
+
+    return <span></span>;
   }, [component]);
 
   return cloneElement(componentRender, {

@@ -31,12 +31,14 @@ export interface ViewComponent extends ComponentBase {
   children: Component[];
 }
 
+export type Rect = { bottom: number; left: number; right: number; top: number };
+
 export interface PressableComponent extends ComponentBase {
   sectionComponentType: 'Pressable';
   props?: {
     delayLongPress: number;
     disabled: boolean;
-    pressRetentionOffset: number;
+    pressRetentionOffset: Rect | number;
     style: CSSProperties;
   };
   children: Component[];

@@ -5,6 +5,7 @@ import { FormField } from './form-field';
 import type { Component } from '../types';
 import { ViewPropsForm } from './forms/view-props-form';
 import { ImagePropsForm } from './forms/image-props-form';
+import { PressablePropsForm } from './forms/pressable-props-form';
 
 interface ComponentPropsProps {
   onChange: (props: Component['props']) => void;
@@ -30,16 +31,20 @@ export const ComponentProps = ({ onChange, onDelete }: ComponentPropsProps) => {
     if (component.sectionComponentType === 'Image') {
       return <ImagePropsForm key={component.id} onChange={onChange} />;
     }
+
+    if (component.sectionComponentType === 'Pressable') {
+      return <PressablePropsForm key={component.id} onChange={onChange} />;
+    }
   }, [component, onChange]);
 
-  if (!component) {
+  if (!component || !component.id) {
     return null;
   }
 
   return (
     <div className="flex flex-col gap-y-2">
       <FormField label="Id" disabled value={component.id} />
-      <FormField label="Order" disabled value={component.order} />
+      <FormField label="Order" disabled value={component.order ?? 0} />
       {form}
       <button
         className="bg-orange-600 rounded-md text-white py-4 cursor-pointer"
