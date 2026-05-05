@@ -57,7 +57,10 @@ export const styleToCssBlock = (
 
 type RNStyle = Record<string, string | number>;
 
-const mapValue = (prop: string, value: string) => {
+const mapValue = (prop: string, value: string | number) => {
+  if (typeof value === 'number') {
+    return value;
+  }
   if (value.endsWith('px')) {
     return Number(value.replace('px', ''));
   }
@@ -83,12 +86,10 @@ export const styleToReactNative = (
   const result: RNStyle = {};
 
   Object.entries(style).forEach((rule) => {
-    const [prop, rawValue] = rule;
-    if (!prop || !rawValue) return;
+    const [prop, value] = rule;
+    if (!prop || !value) return;
 
-    const cssValue = rawValue.trim();
-
-    const rnValue = mapValue(prop, cssValue);
+    const rnValue = mapValue(prop, value);
 
     result[prop] = rnValue;
   });
